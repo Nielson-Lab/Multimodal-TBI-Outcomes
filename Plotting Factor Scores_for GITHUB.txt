@@ -1,0 +1,57 @@
+#Track TBI data with factor scores = TRACK
+#COBRIT data with factor scores = COBRIT
+library(dplyr)
+library(GGally)
+library(ggplot2)
+
+#Plotting factor scores colored by GOSE category in the TRACK-TBI Pilot
+TRACK %>%
+select(Factor.1.Score,Factor.2.Score,Factor.3.Score) %>%
+ggpairs(ggplot2::aes(colour = as.factor(TRACK$GOSE)))
+
+TRACK_Pairs<- ggpairs(
+  TRACK[,c("Factor.1.Score","Factor.2.Score","Factor.3.Score")],
+  mapping = ggplot2::aes(color = as.factor(TRACK$GOSE)),
+  upper = list(continuous = "blank"),
+  lower = list(continuous = wrap("points", alpha = 0.6)),
+  diag = list(continuous = wrap("densityDiag")),
+  title = "PC Scores by GOSE Severity",
+  axisLabels = "show"
+)
+
+for(i in 1:TRACK_Pairs$nrow) {
+ for(j in 1:TRACK_Pairs$ncol){
+ TRACK_Pairs[i,j] <- TRACK_Pairs[i,j] + 
+ scale_fill_manual(values=c("#FF00007D","#00FF007D","#0000FF7D")) +
+ scale_color_manual(values=c("#FF00007D","#00FF007D","#0000FF7D")) 
+ }
+}
+
+#This calls the final TRACK-TBI Pilot plot
+TRACK_Pairs
+
+#Plotting the factor scores colorred by GOSE category in COBRIT
+COBRIT %>%
+select(Factor.1.Score,Factor.2.Score,Factor.3.Score) %>%
+ggpairs(ggplot2::aes(colour = as.factor(COBRIT$GOSE)))
+
+COBRIT_Pairs<- ggpairs(
+  COBRIT[,c("Factor.1.Score","Factor.2.Score","Factor.3.Score")],
+  mapping = ggplot2::aes(color = as.factor(COBRIT$GOSE)),
+  upper = list(continuous = "blank"),
+  lower = list(continuous = wrap("points", alpha = 0.6)),
+  diag = list(continuous = wrap("densityDiag")),
+  title = "PC Scores by GOSE Severity",
+  axisLabels = "show"
+)
+
+for(i in 1:COBRIT_Pairs$nrow) {
+ for(j in 1:COBRIT_Pairs$ncol){
+ COBRIT_Pairs[i,j] <- COBRIT_Pairs[i,j] + 
+ scale_fill_manual(values=c("#FF00007D","#00FF007D","#0000FF7D")) +
+ scale_color_manual(values=c("#FF00007D","#00FF007D","#0000FF7D")) 
+ }
+}
+
+#This calls the final COBRIT plot
+COBRIT_Pairs
